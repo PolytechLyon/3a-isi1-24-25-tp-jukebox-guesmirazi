@@ -1,20 +1,23 @@
-// filepath: /c:/Users/PC/Javascript jukebox/3a-isi1-24-25-tp-jukebox-guesmirazi/src/components/AudioForm.vue
 <template>
   <div>
-    <form @submit.prevent="onSubmit" class="mb-4">
-      <div class="form-group">
-        <label for="audioUrl">Ajouter un lien audio</label>
-        <input v-model="audioUrl" type="text" class="form-control" id="audioUrl" placeholder="Entrez l'URL de l'audio">
-      </div>
-      <button type="submit" class="btn btn-primary">Ajouter</button>
+    <!-- Titre pour ajouter un lien -->
+    <h2>Ajouter un lien</h2>
+    <!-- Formulaire pour entrer un lien audio -->
+    <form @submit.prevent="addAudio">
+      <!-- Champ de saisie pour l'URL de l'audio -->
+      <input 
+        type="text" 
+        v-model="newAudioUrl" 
+        placeholder="Entrez un lien audio (ex: https://example.com/audio.mp3)" 
+      />
+      <!-- Bouton pour soumettre le lien audio -->
+      <button type="submit">Ajouter</button>
     </form>
-    <form @submit.prevent="onFileSubmit" class="mb-4">
-      <div class="form-group">
-        <label for="audioFile">Choisir un fichier</label>
-        <input @change="onFileSelect" type="file" class="form-control-file" id="audioFile">
-      </div>
-      <button type="submit" class="btn btn-primary">Ajouter</button>
-    </form>
+
+    <!-- Titre pour télécharger un fichier -->
+    <h2>Ou téléchargez un fichier MP3</h2>
+    <!-- Entrée pour sélectionner un fichier MP3 local -->
+    <input type="file" @change="uploadFile" accept="audio/mpeg" />
   </div>
 </template>
 
@@ -22,22 +25,28 @@
 export default {
   data() {
     return {
-      audioUrl: '',
-      selectedFile: null
+      // Variable pour stocker l'URL du nouvel audio
+      newAudioUrl: ''
     };
   },
   methods: {
-    onSubmit() {
-      this.$emit('add-audio', this.audioUrl);
-      this.audioUrl = '';
+    // Méthode appelée lors de l'ajout d'un audio via un lien
+    addAudio() {
+      // Émet un événement vers le parent avec l'URL de l'audio
+      this.$emit('add-audio', this.newAudioUrl);
+      // Réinitialise le champ de saisie après l'ajout
+      this.newAudioUrl = '';
     },
-    onFileSelect(event) {
-      this.selectedFile = event.target.files[0];
-    },
-    onFileSubmit() {
-      if (this.selectedFile) {
-        this.$emit('upload-file', this.selectedFile);
-        this.selectedFile = null;
+    // Méthode appelée lors de la sélection d'un fichier local
+    uploadFile(event) {
+      // Récupère le fichier sélectionné par l'utilisateur
+      const file = event.target.files[0];
+      // Vérifie que le fichier est un fichier MP3
+      if (file && file.type === 'audio/mpeg') {
+        // Génère une URL temporaire pour accéder au fichier
+        const fileUrl = URL.createObjectURL(file);
+        // Émet un événement vers le parent avec les informations du fichier
+        this.$emit('upload-file', { name: file.name, src: fileUrl, type: 'file' });
       }
     }
   }
