@@ -1,14 +1,12 @@
 <template>
   <div>
-    <!-- Navbar avec le titre du projet -->
+    <!-- Barre de navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark">
       <a class="navbar-brand" href="#">Projet Juxebox Guesmi Mohamed Amine et Razi Yassine</a>
     </nav>
-    
     <div class="container">
       <h1 class="my-4">Gérer les listes de lecture</h1>
-      
-      <!-- Formulaire pour créer une nouvelle liste de lecture -->
+      <!-- Formulaire pour créer une nouvelle playlist -->
       <form @submit.prevent="createPlaylist" class="mb-4">
         <div class="input-group">
           <input v-model="newPlaylistName" class="form-control" placeholder="Nom de la nouvelle liste de lecture" />
@@ -17,20 +15,17 @@
           </div>
         </div>
       </form>
-      
-      <!-- Liste des playlists existantes -->
+      <!-- Liste des playlists -->
       <ul class="list-group mb-4">
         <li v-for="(playlist, index) in playlists" :key="index" class="list-group-item d-flex justify-content-between align-items-center">
           <span>{{ playlist.name }} ({{ playlist.tracks.length }} titres)</span>
           <div>
-            <!-- Boutons pour sélectionner ou supprimer une playlist -->
             <button class="btn btn-secondary btn-sm mr-2" @click="selectPlaylist(index)">Sélectionner</button>
             <button class="btn btn-danger btn-sm" @click="deletePlaylist(index)" :disabled="index === selectedPlaylistIndex">Supprimer</button>
           </div>
         </li>
       </ul>
-      
-      <!-- Bouton pour revenir à la page d'accueil -->
+      <!-- Bouton pour retourner à la page d'accueil -->
       <button class="btn btn-secondary" @click="goToHomePage">Retour à l'accueil</button>
     </div>
   </div>
@@ -40,51 +35,51 @@
 export default {
   data() {
     return {
-      // Récupération des playlists et de la playlist sélectionnée dans localStorage
-      playlists: JSON.parse(localStorage.getItem('playlists')) || [],
+      playlists: JSON.parse(localStorage.getItem('playlists')) || [], // Liste des playlists
       newPlaylistName: '', // Nom de la nouvelle playlist à créer
       selectedPlaylistIndex: JSON.parse(localStorage.getItem('selectedPlaylistIndex')) || 0 // Index de la playlist sélectionnée
     };
   },
   methods: {
-    // Crée une nouvelle playlist et la sauvegarde dans localStorage
+    // Créer une nouvelle playlist
     createPlaylist() {
+      console.log('Creating playlist:', this.newPlaylistName);
       if (this.newPlaylistName.trim()) {
         this.playlists.push({ name: this.newPlaylistName, tracks: [] });
-        this.newPlaylistName = ''; // Réinitialiser le champ
-        this.savePlaylists(); // Sauvegarde dans localStorage
+        this.newPlaylistName = '';
+        this.savePlaylists();
       }
     },
-    
-    // Sélectionne une playlist et met à jour l'index sélectionné dans localStorage
+    // Sélectionner une playlist et naviguer vers la page d'accueil
     selectPlaylist(index) {
+      console.log('Selecting playlist index:', index);
       this.selectedPlaylistIndex = index;
-      this.saveSelectedPlaylistIndex(); // Sauvegarde l'index sélectionné
-      this.$router.push('/'); // Redirige vers la page principale
+      this.saveSelectedPlaylistIndex();
+      this.$router.push('/');
     },
-    
-    // Supprime une playlist et met à jour la sélection si nécessaire
+    // Supprimer une playlist
     deletePlaylist(index) {
+      console.log('Deleting playlist index:', index);
       this.playlists.splice(index, 1);
       if (index === this.selectedPlaylistIndex) {
-        this.selectedPlaylistIndex = 0; // Réinitialise l'index si la playlist supprimée était sélectionnée
+        this.selectedPlaylistIndex = 0;
       }
-      this.savePlaylists(); // Sauvegarde dans localStorage
-      this.saveSelectedPlaylistIndex(); // Sauvegarde de l'index de la playlist sélectionnée
+      this.savePlaylists();
+      this.saveSelectedPlaylistIndex();
     },
-    
-    // Sauvegarde les playlists dans localStorage
+    // Enregistrer les playlists dans le localStorage
     savePlaylists() {
+      console.log('Saving playlists:', this.playlists);
       localStorage.setItem('playlists', JSON.stringify(this.playlists));
     },
-    
-    // Sauvegarde l'index de la playlist sélectionnée dans localStorage
+    // Enregistrer l'index de la playlist sélectionnée dans le localStorage
     saveSelectedPlaylistIndex() {
+      console.log('Saving selected playlist index:', this.selectedPlaylistIndex);
       localStorage.setItem('selectedPlaylistIndex', JSON.stringify(this.selectedPlaylistIndex));
     },
-    
-    // Redirige l'utilisateur vers la page d'accueil
+    // Naviguer vers la page d'accueil
     goToHomePage() {
+      console.log('Navigating to home page');
       this.$router.push('/');
     }
   }
