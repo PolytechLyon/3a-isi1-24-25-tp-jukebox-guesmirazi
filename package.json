@@ -1,0 +1,22 @@
+{
+  "name": "tp-isi1-razi-guesmi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "vite": "^6.0.7",
+    "vue": "^3.5.13",
+    "vue-router": "^4.0.13"
+  },
+  "description": "",
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1"
+  }
+}
