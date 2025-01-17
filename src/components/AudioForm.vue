@@ -1,17 +1,20 @@
+// filepath: /c:/Users/PC/Javascript jukebox/3a-isi1-24-25-tp-jukebox-guesmirazi/src/components/AudioForm.vue
 <template>
   <div>
-    <h2>Ajouter un lien</h2>
-    <form @submit.prevent="addAudio">
-      <input 
-        type="text" 
-        v-model="newAudioUrl" 
-        placeholder="Entrez un lien audio (ex: https://example.com/audio.mp3)" 
-      />
-      <button type="submit">Ajouter</button>
+    <form @submit.prevent="onSubmit" class="mb-4">
+      <div class="form-group">
+        <label for="audioUrl">Ajouter un lien audio</label>
+        <input v-model="audioUrl" type="text" class="form-control" id="audioUrl" placeholder="Entrez l'URL de l'audio">
+      </div>
+      <button type="submit" class="btn btn-primary">Ajouter</button>
     </form>
-
-    <h2>Ou téléchargez un fichier MP3</h2>
-    <input type="file" @change="uploadFile" accept="audio/mpeg" />
+    <form @submit.prevent="onFileSubmit" class="mb-4">
+      <div class="form-group">
+        <label for="audioFile">Choisir un fichier</label>
+        <input @change="onFileSelect" type="file" class="form-control-file" id="audioFile">
+      </div>
+      <button type="submit" class="btn btn-primary">Ajouter</button>
+    </form>
   </div>
 </template>
 
@@ -19,19 +22,22 @@
 export default {
   data() {
     return {
-      newAudioUrl: ''
+      audioUrl: '',
+      selectedFile: null
     };
   },
   methods: {
-    addAudio() {
-      this.$emit('add-audio', this.newAudioUrl);
-      this.newAudioUrl = '';
+    onSubmit() {
+      this.$emit('add-audio', this.audioUrl);
+      this.audioUrl = '';
     },
-    uploadFile(event) {
-      const file = event.target.files[0];
-      if (file && file.type === 'audio/mpeg') {
-        const fileUrl = URL.createObjectURL(file);
-        this.$emit('upload-file', { name: file.name, src: fileUrl, type: 'file' });
+    onFileSelect(event) {
+      this.selectedFile = event.target.files[0];
+    },
+    onFileSubmit() {
+      if (this.selectedFile) {
+        this.$emit('upload-file', this.selectedFile);
+        this.selectedFile = null;
       }
     }
   }
