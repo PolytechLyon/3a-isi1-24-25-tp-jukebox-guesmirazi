@@ -1,18 +1,29 @@
 // filepath: /c:/Users/PC/Javascript jukebox/3a-isi1-24-25-tp-jukebox-guesmirazi/src/components/ManagePlaylists.vue
 <template>
   <div>
-    <h1>Gérer les listes de lecture</h1>
-    <form @submit.prevent="createPlaylist">
-      <input v-model="newPlaylistName" placeholder="Nom de la nouvelle liste de lecture" />
-      <button type="submit">Créer</button>
-    </form>
-    <ul>
-      <li v-for="(playlist, index) in playlists" :key="index">
-        <span>{{ playlist.name }} ({{ playlist.tracks.length }} titres)</span>
-        <button @click="selectPlaylist(index)">Sélectionner</button>
-        <button @click="deletePlaylist(index)" :disabled="index === selectedPlaylistIndex">Supprimer</button>
-      </li>
-    </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <a class="navbar-brand" href="#">Projet Juxebox Guesmi Mohamed Amine et Razi Yassine</a>
+    </nav>
+    <div class="container">
+      <h1 class="my-4">Gérer les listes de lecture</h1>
+      <form @submit.prevent="createPlaylist" class="mb-4">
+        <div class="input-group">
+          <input v-model="newPlaylistName" class="form-control" placeholder="Nom de la nouvelle liste de lecture" />
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="submit">Créer</button>
+          </div>
+        </div>
+      </form>
+      <ul class="list-group">
+        <li v-for="(playlist, index) in playlists" :key="index" class="list-group-item d-flex justify-content-between align-items-center">
+          <span>{{ playlist.name }} ({{ playlist.tracks.length }} titres)</span>
+          <div>
+            <button class="btn btn-secondary btn-sm mr-2" @click="selectPlaylist(index)">Sélectionner</button>
+            <button class="btn btn-danger btn-sm" @click="deletePlaylist(index)" :disabled="index === selectedPlaylistIndex">Supprimer</button>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 

@@ -1,17 +1,23 @@
 // filepath: /c:/Users/PC/Javascript jukebox/3a-isi1-24-25-tp-jukebox-guesmirazi/src/components/MainPage.vue
 <template>
   <div>
-    <h1>Boîte Musicale</h1>
-    <button @click="$router.push('/manage-playlists')">Gérer les listes de lecture</button>
-    <p>Ajoutez des liens audio ou téléchargez des fichiers MP3 pour les écouter !</p>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <a class="navbar-brand" href="#">Projet Juxebox Guesmi Mohamed Amine et Razi Yassine</a>
+    </nav>
+    <div class="container">
+      <h1 class="my-4">Boîte Musicale</h1>
+      <button class="btn btn-primary mb-3" @click="$router.push('/manage-playlists')">Gérer les listes de lecture</button>
+      <p>Ajoutez des liens audio ou téléchargez des fichiers MP3 pour les écouter !</p>
+      <p v-if="selectedPlaylistName">Liste de lecture sélectionnée : {{ selectedPlaylistName }}</p>
 
-    <AudioForm @add-audio="addAudio" @upload-file="uploadFile" />
-    <Playlist :playlist="currentPlaylist.tracks" @play-audio="playAudio" @remove-audio="removeAudio" />
-    <AudioPlayer 
-      :playlist="currentPlaylist.tracks" 
-      :currentAudioIndex="currentAudioIndex" 
-      @play-audio="playAudio" 
-    />
+      <AudioForm @add-audio="addAudio" @upload-file="uploadFile" />
+      <Playlist :playlist="currentPlaylist.tracks" @play-audio="playAudio" @remove-audio="removeAudio" />
+      <AudioPlayer 
+        :playlist="currentPlaylist.tracks" 
+        :currentAudioIndex="currentAudioIndex" 
+        @play-audio="playAudio" 
+      />
+    </div>
   </div>
 </template>
 
@@ -36,6 +42,9 @@ export default {
   computed: {
     currentPlaylist() {
       return this.playlists[this.selectedPlaylistIndex] || { name: '', tracks: [] };
+    },
+    selectedPlaylistName() {
+      return this.currentPlaylist.name;
     }
   },
   created() {
