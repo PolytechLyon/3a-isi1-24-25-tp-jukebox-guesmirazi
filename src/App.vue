@@ -30,10 +30,15 @@ export default {
       currentAudioIndex: null
     };
   },
+  created() {
+    this.loadPlaylist();
+  },
   methods: {
     addAudio(url) {
       if (url.trim() && !this.playlist.find(audio => audio.src === url)) {
-        this.playlist.push({ name: url, src: url, type: 'url' });
+        const newAudio = { name: url, src: url, type: 'url' };
+        this.playlist.push(newAudio);
+        this.savePlaylist();
       }
     },
     uploadFile(file) {
@@ -47,6 +52,17 @@ export default {
       this.playlist.splice(index, 1);
       if (wasPlaying) {
         this.currentAudioIndex = null;
+      }
+      this.savePlaylist();
+    },
+    savePlaylist() {
+      const publicLinks = this.playlist.filter(audio => audio.type === 'url');
+      localStorage.setItem('playlist', JSON.stringify(publicLinks));
+    },
+    loadPlaylist() {
+      const savedPlaylist = localStorage.getItem('playlist');
+      if (savedPlaylist) {
+        this.playlist = JSON.parse(savedPlaylist);
       }
     }
   }
